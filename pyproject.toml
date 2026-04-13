@@ -4,15 +4,26 @@ build-backend = "hatchling.build"
 
 [project]
 name = "time-tracker-ai-mcp"
-version = "0.1.0"
-description = "Track work hours, calculate durations, and summarize time entries by project or date."
+version = "1.0.0"
+description = "MEOK AI Labs — Time Tracker tools for AI agents and LLMs"
+authors = [{name="MEOK AI Labs", email="nicholas@meok.ai"}]
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
+keywords = ["mcp", "mcp-server", "model-context-protocol", "claude", "ai-tools", "meok-ai-labs", "time-tracking", "timesheet", "work-hours", "project-time", "billable-hours"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Developers",
+]
 dependencies = [
     "mcp>=1.0.0",
-    "pydantic>=2.0",
 ]
 
-[project.scripts]
-time_tracker_ai_mcp = "time_tracker_ai_mcp.server:main"
+[project.urls]
+Homepage = "https://meok.ai"
+Repository = "https://github.com/CSOAI-ORG/time-tracker-ai-mcp"
+Documentation = "https://meok.ai/docs/time-tracker-ai-mcp"
+"Bug Tracker" = "https://github.com/CSOAI-ORG/time-tracker-ai-mcp/issues"

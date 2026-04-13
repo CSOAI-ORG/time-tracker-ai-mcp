@@ -1,0 +1,10 @@
+name: time-tracker-ai-mcp
+description: "MEOK AI Labs — Time Tracker tools for AI agents and LLMs"
+vendor: MEOK AI Labs
+homepage: https://meok.ai
+repository: https://github.com/CSOAI-ORG/time-tracker-ai-mcp
+license: MIT
+categories: [Productivity, Business]
+tags: [time-tracking, timesheet, work-hours, project-time, billable-hours]
+runtime: python
+entrypoint: server.py

@@ -1,5 +1,4 @@
 name: time-tracker-ai-mcp
-description: Track work hours, calculate durations, and summarize time entries by
-  project or date.
+description: MEOK AI Labs MCP Server
 version: 1.0.0
 tools: []

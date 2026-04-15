@@ -17,27 +17,43 @@ import mcp.types as types
 import sys, os
 sys.path.insert(0, os.path.expanduser("~/clawd/meok-labs-engine/shared"))
 from auth_middleware import check_access
-import json
+
+from datetime import datetime, timezone
+from collections import defaultdict
+
+FREE_DAILY_LIMIT = 15
+_usage = defaultdict(list)
+def _rl(c="anon"):
+    now = datetime.now(timezone.utc)
+    _usage[c] = [t for t in _usage[c] if (now-t).total_seconds() < 86400]
+    if len(_usage[c]) >= FREE_DAILY_LIMIT: return json.dumps({"error": f"Limit {FREE_DAILY_LIMIT}/day"})
+    _usage[c].append(now); return None
 
 # In-memory store (replace with DB in production)
 _store = {}
 
-server = Server("time-tracker-ai-mcp")
+server = Server("time-tracker-ai")
 
 @server.list_resources()
-async def handle_list_resources() -> list[Resource]:
+def handle_list_resources() -> list[Resource]:
     return []
 
 @server.list_tools()
-async def handle_list_tools() -> list[Tool]:
+def handle_list_tools() -> list[Tool]:
     return [
         Tool(name="log_time", description="Log work time", inputSchema={"type":"object","properties":{"project":{"type":"string"},"hours":{"type":"number"}},"required":["project","hours"]}),
         Tool(name="get_time_report", description="Get time report", inputSchema={"type":"object","properties":{}}),
     ]
 
 @server.call_tool()
-async def handle_call_tool(name: str, arguments: Any | None) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
+def handle_call_tool(name: str, arguments: Any | None) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
     args = arguments or {}
+    api_key = args.get("api_key", "")
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return [TextContent(type="text", text=json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"}))]
+    if err := _rl():
+        return [TextContent(type="text", text=err)]
     if name == "log_time":
         _store.setdefault(args["project"], 0)
         _store[args["project"]] += args["hours"]

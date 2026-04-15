@@ -144,7 +144,7 @@ def get_report(project: str = "", days: int = 7, api_key: str = "") -> str:
         "by_project": project_breakdown,
         "by_date": daily_breakdown,
         "top_tags": [{"tag": t, "hours": round(h, 2)} for t, h in top_tags] if top_tags else [],
-        "active_timer": _active_timer,
+        "active_timer": _store.get("active_timer"),
     }, indent=2)
 
 
@@ -155,7 +155,7 @@ def list_entries(project: str = "", limit: int = 20, api_key: str = "") -> str:
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
     if err := _rl(): return err
-    entries = _entries
+    entries = _store.list("entries")
     if project:
         entries = [e for e in entries if e["project"].lower() == project.lower()]
     limit = max(1, min(limit, 100))
@@ -167,7 +167,7 @@ def list_entries(project: str = "", limit: int = 20, api_key: str = "") -> str:
         "total_entries": len(entries),
         "total_hours": round(total, 2),
         "filter_project": project or "all",
-        "active_timer": _active_timer,
+        "active_timer": _store.get("active_timer"),
     }, indent=2)
 
 

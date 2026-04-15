@@ -1,6 +1,6 @@
 {
   "name": "time-tracker-ai-mcp",
-  "description": "> **By [MEOK AI Labs](https://meok.ai)** \u2014 Track work time with start/stop timers, log entries, and generate reports. By MEOK AI Labs.",
+  "description": "Time Tracker Ai tools for AI agents. Capabilities: start timer, stop timer, get report. Built by MEOK AI Labs.",
   "version": "1.0.0",
   "tools": [
     {

@@ -3,11 +3,14 @@
 import sys, os
 sys.path.insert(0, os.path.expanduser('~/clawd/meok-labs-engine/shared'))
 from auth_middleware import check_access
+from persistence import ServerStore
 
 import json
 from datetime import datetime, timezone
 from collections import defaultdict
 from mcp.server.fastmcp import FastMCP
+
+_store = ServerStore("time-tracker-ai")
 
 FREE_DAILY_LIMIT = 15
 _usage = defaultdict(list)
@@ -17,40 +20,37 @@ def _rl(c="anon"):
     if len(_usage[c]) >= FREE_DAILY_LIMIT: return json.dumps({"error": f"Limit {FREE_DAILY_LIMIT}/day"})
     _usage[c].append(now); return None
 
-# In-memory store
-_entries: list[dict] = []
-_active_timer: dict | None = None
-
 mcp = FastMCP("time-tracker-ai", instructions="Track work time with start/stop timers, log entries, and generate reports. By MEOK AI Labs.")
 
 
 @mcp.tool()
 def start_timer(project: str, task: str = "", tags: str = "", api_key: str = "") -> str:
     """Start a time tracking timer for a project. Optionally add a task description and comma-separated tags."""
-    global _active_timer
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
     if err := _rl(): return err
-    if _active_timer:
+    active_timer = _store.get("active_timer")
+    if active_timer:
         return json.dumps({
             "error": "Timer already running. Stop it first.",
-            "active_timer": _active_timer,
+            "active_timer": active_timer,
         })
     tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
-    _active_timer = {
+    active_timer = {
         "project": project,
         "task": task or "General",
         "tags": tag_list,
         "started_at": datetime.now(timezone.utc).isoformat(),
     }
+    _store.set("active_timer", active_timer)
     # Count today's entries for context
     today = datetime.now(timezone.utc).date().isoformat()
-    today_entries = [e for e in _entries if e["date"] == today]
+    today_entries = [e for e in _store.list("entries") if e["date"] == today]
     today_hours = sum(e["hours"] for e in today_entries)
     return json.dumps({
         "status": "timer_started",
-        "timer": _active_timer,
+        "timer": active_timer,
         "today_so_far": {
             "entries": len(today_entries),
             "hours_logged": round(today_hours, 2),
@@ -61,39 +61,40 @@ def start_timer(project: str, task: str = "", tags: str = "", api_key: str = "")
 @mcp.tool()
 def stop_timer(notes: str = "", api_key: str = "") -> str:
     """Stop the running timer and log the time entry. Optionally add notes."""
-    global _active_timer
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
     if err := _rl(): return err
-    if not _active_timer:
+    active_timer = _store.get("active_timer")
+    if not active_timer:
         return json.dumps({"error": "No timer running. Start one first."})
     now = datetime.now(timezone.utc)
-    started = datetime.fromisoformat(_active_timer["started_at"])
+    started = datetime.fromisoformat(active_timer["started_at"])
     duration_seconds = (now - started).total_seconds()
     hours = round(duration_seconds / 3600, 3)
     minutes = round(duration_seconds / 60, 1)
     entry = {
-        "id": len(_entries) + 1,
-        "project": _active_timer["project"],
-        "task": _active_timer["task"],
-        "tags": _active_timer["tags"],
-        "started_at": _active_timer["started_at"],
+        "id": _store.list_length("entries") + 1,
+        "project": active_timer["project"],
+        "task": active_timer["task"],
+        "tags": active_timer["tags"],
+        "started_at": active_timer["started_at"],
         "ended_at": now.isoformat(),
         "hours": hours,
         "minutes": minutes,
         "notes": notes,
         "date": now.date().isoformat(),
     }
-    _entries.append(entry)
-    _active_timer = None
+    _store.append("entries", entry)
+    _store.delete("active_timer")
     # Project totals
-    project_total = sum(e["hours"] for e in _entries if e["project"] == entry["project"])
+    all_entries = _store.list("entries")
+    project_total = sum(e["hours"] for e in all_entries if e["project"] == entry["project"])
     return json.dumps({
         "status": "timer_stopped",
         "entry": entry,
         "project_total_hours": round(project_total, 2),
-        "all_entries_count": len(_entries),
+        "all_entries_count": len(all_entries),
     }, indent=2)
 
 
@@ -104,9 +105,10 @@ def get_report(project: str = "", days: int = 7, api_key: str = "") -> str:
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
     if err := _rl(): return err
-    if not _entries:
+    all_entries = _store.list("entries")
+    if not all_entries:
         return json.dumps({"message": "No time entries yet. Start tracking!", "entries": 0})
-    entries = _entries
+    entries = all_entries
     if project:
         entries = [e for e in entries if e["project"].lower() == project.lower()]
         if not entries:

@@ -1,10 +1,44 @@
 name: time-tracker-ai-mcp
-description: MEOK AI Labs MCP Server
+description: Track work time with start/stop timers, log entries, and generate reports.
+  By MEOK AI Labs.
 version: 1.0.0
 tools:
-- name: log_time
-  description: Log work time
-  parameters: []
-- name: get_time_report
-  description: Get time report
-  parameters: []
+- name: start_timer
+  description: Start a time tracking timer for a project. Optionally add a task description
+    and comma-separated tags.
+  parameters:
+  - name: project
+    type: string
+    required: true
+  - name: task
+    type: string
+    required: false
+  - name: tags
+    type: string
+    required: false
+- name: stop_timer
+  description: Stop the running timer and log the time entry. Optionally add notes.
+  parameters:
+  - name: notes
+    type: string
+    required: false
+- name: get_report
+  description: Generate a time report. Optionally filter by project. Shows totals
+    per project and per day.
+  parameters:
+  - name: project
+    type: string
+    required: false
+  - name: days
+    type: integer
+    required: false
+- name: list_entries
+  description: List recent time entries. Optionally filter by project. Returns up
+    to limit entries (default 20).
+  parameters:
+  - name: project
+    type: string
+    required: false
+  - name: limit
+    type: integer
+    required: false

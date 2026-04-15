@@ -1,23 +1,71 @@
 {
   "name": "time-tracker-ai-mcp",
-  "description": "> **By [MEOK AI Labs](https://meok.ai)** \u2014 MEOK AI Labs MCP Server",
+  "description": "> **By [MEOK AI Labs](https://meok.ai)** \u2014 Track work time with start/stop timers, log entries, and generate reports. By MEOK AI Labs.",
   "version": "1.0.0",
   "tools": [
     {
-      "name": "log_time",
-      "description": "Log work time",
+      "name": "start_timer",
+      "description": "Start a time tracking timer for a project. Optionally add a task description and comma-separated tags.",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "project": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "project"
+        ]
+      }
+    },
+    {
+      "name": "stop_timer",
+      "description": "Stop the running timer and log the time entry. Optionally add notes.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "notes": {
+            "type": "string"
+          }
+        },
         "required": []
       }
     },
     {
-      "name": "get_time_report",
-      "description": "Get time report",
+      "name": "get_report",
+      "description": "Generate a time report. Optionally filter by project. Shows totals per project and per day.",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "project": {
+            "type": "string"
+          },
+          "days": {
+            "type": "integer"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "list_entries",
+      "description": "List recent time entries. Optionally filter by project. Returns up to limit entries (default 20).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
         "required": []
       }
     }

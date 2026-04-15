@@ -1,4 +1,10 @@
 name: time-tracker-ai-mcp
 description: MEOK AI Labs MCP Server
 version: 1.0.0
-tools: []
+tools:
+- name: log_time
+  description: Log work time
+  parameters: []
+- name: get_time_report
+  description: Get time report
+  parameters: []

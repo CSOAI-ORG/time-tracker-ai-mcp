@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Time Tracker AI — track work time, manage projects, and generate productivity reports. MEOK AI Labs."""
 import sys, os
-sys.path.insert(0, os.path.expanduser('~/clawd/meok-labs-engine/shared'))
 from auth_middleware import check_access
 from persistence import ServerStore
 
@@ -9,6 +8,15 @@ import json
 from datetime import datetime, timezone
 from collections import defaultdict
 from mcp.server.fastmcp import FastMCP
+
+STRIPE_199 = "https://buy.stripe.com/00wfZjcgAeUW4c5cyQ8k90K"
+
+def _add_upgrade_tail(response, tier="free"):
+    """Append upgrade nudge to free-tier success responses."""
+    if isinstance(response, dict) and tier == "free":
+        response["_upgrade_note"] = "Pro tier: unlimited calls + priority support. Upgrade: " + STRIPE_199
+    return response
+
 
 _store = ServerStore("time-tracker-ai")
 
@@ -28,7 +36,7 @@ def start_timer(project: str, task: str = "", tags: str = "", api_key: str = "")
     """Start a time tracking timer for a project. Optionally add a task description and comma-separated tags."""
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": STRIPE_199})
     if err := _rl(): return err
     active_timer = _store.get("active_timer")
     if active_timer:
@@ -63,7 +71,7 @@ def stop_timer(notes: str = "", api_key: str = "") -> str:
     """Stop the running timer and log the time entry. Optionally add notes."""
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": STRIPE_199})
     if err := _rl(): return err
     active_timer = _store.get("active_timer")
     if not active_timer:
@@ -103,7 +111,7 @@ def get_report(project: str = "", days: int = 7, api_key: str = "") -> str:
     """Generate a time report. Optionally filter by project. Shows totals per project and per day."""
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": STRIPE_199})
     if err := _rl(): return err
     all_entries = _store.list("entries")
     if not all_entries:
@@ -153,7 +161,7 @@ def list_entries(project: str = "", limit: int = 20, api_key: str = "") -> str:
     """List recent time entries. Optionally filter by project. Returns up to limit entries (default 20)."""
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": STRIPE_199})
     if err := _rl(): return err
     entries = _store.list("entries")
     if project:
@@ -171,5 +179,8 @@ def list_entries(project: str = "", limit: int = 20, api_key: str = "") -> str:
     }, indent=2)
 
 
-if __name__ == "__main__":
+def main():
     mcp.run()
+
+if __name__ == '__main__':
+    main()

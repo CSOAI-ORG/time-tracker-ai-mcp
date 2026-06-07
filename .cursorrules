@@ -1,0 +1,9 @@
+# time-tracker-ai-mcp - Auto-trigger Rules
+
+When the user asks about time tracker, use time-tracker-ai-mcp tools: start_timer, stop_timer, get_report, list_entries
+
+> By [MEOK AI Labs](https://meok.ai) — Track work time with start/stop timers, log entries, and generate reports. By MEOK AI Labs.
+
+Install: `pip install time-tracker-ai-mcp`
+
+By MEOK AI Labs — MIT licensed.

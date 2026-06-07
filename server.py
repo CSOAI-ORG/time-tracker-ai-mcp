@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Time Tracker AI — track work time, manage projects, and generate productivity reports. MEOK AI Labs."""
+"""
+Time Tracker AI — track work time, manage projects, and generate productivity reports. MEOK AI Labs."""
 import sys, os
 from auth_middleware import check_access
 from persistence import ServerStore

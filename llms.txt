@@ -1,0 +1,33 @@
+# time-tracker-ai-mcp
+# > By [MEOK AI Labs](https://meok.ai) — Track work time with start/stop timers, log entries, and generate reports. By MEOK AI Labs.
+
+## Install
+```bash
+pip install time-tracker-ai-mcp
+```
+
+## Auth & Rate Limits
+- Free tier: 10 calls/day. No API key required.
+- Pro tier (£79/mo): unlimited + signed attestations.
+- Enterprise (£1,499/mo): white-label.
+
+## Tools
+
+### `start_timer`
+Start a time tracking timer for a project. Optionally add a task description and comma-separated tags.
+
+### `stop_timer`
+Stop the running timer and log the time entry. Optionally add notes.
+
+### `get_report`
+Generate a time report. Optionally filter by project. Shows totals per project and per day.
+
+### `list_entries`
+List recent time entries. Optionally filter by project. Returns up to limit entries (default 20).
+
+
+## Maintainer
+MEOK AI Labs · hello@meok.ai · https://meok.ai · MIT licensed
+
+## Pairs with
+Governance moat: pair this tool with any of MEOK's 38 governance MCPs (EU AI Act, DORA, NIS2, CRA, GDPR, ISO 42001, etc.) for full compliance coverage.

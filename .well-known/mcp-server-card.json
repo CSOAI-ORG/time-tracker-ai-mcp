@@ -1,0 +1,25 @@
+{
+  "name": "time-tracker-ai-mcp",
+  "title": "Time Tracker Ai Mcp",
+  "description": "Time Tracker Ai tools for AI agents. Capabilities: start timer, stop timer, get report. Built by MEOK AI Labs.",
+  "version": "1.0.5",
+  "homepage": "https://meok.ai",
+  "license": "MIT",
+  "transport": {
+    "type": "stdio"
+  },
+  "tools": [
+    {
+      "name": "start_timer"
+    },
+    {
+      "name": "stop_timer"
+    },
+    {
+      "name": "get_report"
+    },
+    {
+      "name": "list_entries"
+    }
+  ]
+}

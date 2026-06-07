@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
+  "name": "io.github.CSOAI-ORG/time-tracker-ai-mcp",
+  "description": "Time Tracker Ai tools for AI agents. Capabilities: start timer, stop timer, get report. Built by MEOK AI Labs.",
+  "version": "1.0.5",
+  "repository": {
+    "url": "https://github.com/CSOAI-ORG/time-tracker-ai-mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registry_type": "pypi",
+      "identifier": "time-tracker-ai-mcp",
+      "version": "1.0.5",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "time-tracker-ai-mcp",
+  "description": "Time Tracker Ai tools for AI agents. Capabilities: start timer, stop timer, get report. Built by",
+  "url": "https://proofof.ai/scorecard/time-tracker-ai-mcp.html",
+  "version": "1.0.5",
+  "protocolVersion": "0.2.0",
+  "provider": {
+    "organization": "MEOK AI Labs",
+    "url": "https://meok.ai"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "defaultInputModes": [
+    "text"
+  ],
+  "defaultOutputModes": [
+    "text"
+  ],
+  "skills": [
+    {
+      "id": "start_timer",
+      "name": "Start Timer",
+      "description": "start_timer via time-tracker-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "stop_timer",
+      "name": "Stop Timer",
+      "description": "stop_timer via time-tracker-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_report",
+      "name": "Get Report",
+      "description": "get_report via time-tracker-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "list_entries",
+      "name": "List Entries",
+      "description": "list_entries via time-tracker-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    }
+  ]
+}

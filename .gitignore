@@ -4,3 +4,9 @@ __pycache__/
 *.egg-info/
 .dist/
 build/
+
+# Auto-added during alignment sweep
+dist/time_tracker_ai_mcp-1.0.7-py3-none-any.whl
+dist/time_tracker_ai_mcp-1.0.7.tar.gz
+dist/time_tracker_ai_mcp-1.0.10-py3-none-any.whl
+dist/time_tracker_ai_mcp-1.0.10.tar.gz

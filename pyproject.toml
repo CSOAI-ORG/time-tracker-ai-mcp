@@ -9,7 +9,7 @@ description = "Time Tracker Ai tools for AI agents. Capabilities: start timer, s
 license = {file = "LICENSE"}
 requires-python = ">=3.10"
 authors = [{name = "MEOK AI Labs", email = "nicholas@meok.ai"}]
-dependencies = ["mcp>=1.0.0"]
+dependencies = ["mcp>=2.0.0"]
 keywords = ["mcp", "ai", "meok", "time", "tracker"]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -22,7 +22,7 @@ Homepage = "https://meok.ai"
 Repository = "https://github.com/CSOAI-ORG/time-tracker-ai-mcp"
 [tool.hatch.build.targets.wheel]
 packages = ["."]
-only-include = ["server.py", "auth_middleware.py", "persistence.py"]
+only-include = ["server.py", "auth_middleware.py", "persistence.py", "mcp2026_shim.py"]
 
 [project.scripts]
 time_tracker_ai_mcp = "server:main"
